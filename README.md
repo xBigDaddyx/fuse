@@ -1,4 +1,4 @@
-# Multi-Tenancy, User and Employee Management for Teresa
+# FUSE
 ![Fuse](./assets/fuse_banner.png)
 
 This is package Multi-Tenancy, User and Employee Management for Teresa.
