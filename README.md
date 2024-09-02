@@ -1,5 +1,9 @@
 # Multi-Tenancy, User and Employee Management for Teresa
-[!(fuse_banner.svg)](https://github.com/xBigDaddyx/fuse/asset/)
+<p align=”center”>
+
+<img width=”200" height=”200" src=”https://github.com/xBigDaddyx/fuse/blob/master/assets/fuse_banner.png" alt=”my banner”>
+
+</p>
 <div align=center>
 
 :point_right: **https://github.com/xBigDaddyx/fuse** :point_left:
