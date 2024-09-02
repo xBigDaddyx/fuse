@@ -1,16 +1,6 @@
 # Multi-Tenancy, User and Employee Management for Teresa
-<p align=”center”>
+![Fuse](./assets/fuse_banner.png)
 
-<img width=”200" height=”200" src=”https://github.com/xBigDaddyx/fuse/blob/master/assets/fuse_banner.png" alt=”my banner”>
-
-</p>
-<div align=center>
-
-:point_right: **https://github.com/xBigDaddyx/fuse** :point_left:
-
-[MIT license](LICENSE)
-
-</div>
 This is package Multi-Tenancy, User and Employee Management for Teresa.
 
 
