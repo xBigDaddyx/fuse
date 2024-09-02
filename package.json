@@ -1,0 +1,22 @@
+{
+    "private": true,
+    "scripts": {
+        "dev:styles": "npx tailwindcss -i resources/css/filament/fuse-theme.css -o resources/dist/filament/fuse-theme.css --postcss --watch",
+        "build:styles": "npx tailwindcss -i resources/css/filament/fuse-theme.css -o resources/dist/filament/fuse-theme.css --postcss --minify && npm run purge",
+        "purge": "filament-purge -i resources/dist/filament/fuse-theme.css -o resources/dist/filament/fuse-theme.css -v 3.x",
+        "dev": "npm-run-all --parallel dev:*",
+        "build": "npm-run-all build:*"
+    },
+    "devDependencies": {
+        "@awcodes/filament-plugin-purge": "^1.0.1",
+        "autoprefixer": "^10.4.20",
+        "laravel-vite-plugin": "^1.0.5",
+        "postcss": "^8.4.41",
+        "postcss-nesting": "^13.0.0",
+        "tailwindcss": "^3.4.10",
+        "vite": "^5.4.2"
+    },
+    "dependencies": {
+        "fuse.js": "^6.5.3"
+    }
+}

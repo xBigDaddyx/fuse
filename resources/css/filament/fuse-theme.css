@@ -1,0 +1,42 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+.fi-sidebar {
+    @apply !important;
+}.fi-sidebar-nav {@apply bg-white mr-4 shadow-md }
+.fi-header-heading{
+    @apply bg-gradient-to-r from-primary-400 to-primary-300 dark:from-primary-800 dark:to-primary-950 text-transparent bg-clip-text;
+}
+.fi-sidebar-header {
+    @apply bg-white ring-0 shadow-none mr-4 shadow-md !important;
+}
+.fi-sidebar-item-active a {
+    @apply bg-primary-600 hover:bg-secondary-500 dark:bg-primary-950/70  dark:hover:bg-primary-950/70 text-white dark:text-white transition ;
+}
+.fi-sidebar-item-active .fi-sidebar-item-label {
+    @apply text-white dark:text-white;
+}
+.fi-sidebar-item-active svg {
+    @apply text-white dark:text-white;
+}
+.fi-sidebar-item:not(.fi-sidebar-item-active) a {
+    @apply dark:text-gray-400 hover:bg-primary-100 dark:hover:bg-primary-800/50 dark:hover:text-white;
+}
+.fi-sidebar-item:not(.fi-sidebar-item-active):hover a svg {
+    @apply dark:text-white;
+}
+.fi-layout {@apply  bg-gradient-to-l from-primary-200 to-primary-100 dark:from-primary-800 dark:to-primary-950 !important}
+.fi-topbar nav {
+    @apply dark:bg-gray-800 bg-white my-4 ring-0 shadow-md mx-2 rounded-xl  w-11/12 max-w-full mx-auto !important
+}
+.fi-ta-header-cell {@apply bg-primary-50}
+.fi-main {
+    @apply bg-white mx-2 dark:bg-gray-800 shadow-md rounded-xl w-11/12 max-w-full !overflow-y-auto flex-grow mx-auto;
+}
+.fi-section, .fi-wi-stats-overview-stat, .fi-ta-ctn, .fi-tenant-menu, .fi-dropdown-panel {
+    @apply border border-transparent dark:bg-secondary-900
+        [background:linear-gradient(white,white)_padding-box,linear-gradient(to_right,rgb(var(--primary-300)),rgb(var(--primary-400)))_border-box;]
+        dark:[background:linear-gradient(#1e2c2e,#1e2c2e)_padding-box,linear-gradient(to_right,rgb(var(--primary-800)),rgb(var(--primary-800)))_border-box;];
+}
+.th {@apply bg-primary-50}
