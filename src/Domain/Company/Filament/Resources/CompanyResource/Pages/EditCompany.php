@@ -13,8 +13,10 @@ class EditCompany extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
+            Actions\ViewAction::make()
+            ->visible(fn ():bool=>auth()->user()->can('viewAny_company')),
+            Actions\DeleteAction::make()
+            ->visible(fn ():bool=>auth()->user()->can('delete_company')),
         ];
     }
 }

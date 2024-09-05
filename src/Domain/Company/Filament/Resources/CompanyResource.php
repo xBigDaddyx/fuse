@@ -2,23 +2,77 @@
 
 namespace Xbigdaddyx\Fuse\Domain\Company\Filament\Resources;
 
+use Filament\Actions\Action;
 use Xbigdaddyx\Fuse\Domain\Company\Filament\Resources\CompanyResource\Pages;
 use Xbigdaddyx\Fuse\Domain\Company\Filament\Resources\CompanyResource\RelationManagers;
 use Xbigdaddyx\Fuse\Domain\Company\Models\Company;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 
 class CompanyResource extends Resource
 {
     protected static ?string $model = Company::class;
-    protected static ?string $navigationGroup = 'Manage';
+    protected static ?string $recordTitleAttribute = 'name';
+    protected static ?int $navigationSort = 9;
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    public static function getGloballySearchableAttributes(): array
+    {
+            return ['short_name', 'name', 'address'];
+    }
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Address' => $record->address,
+        ];
+    }
+    public static function getGlobalSearchResultActions(Model $record): array
+    {
+        return [
+            Action::make('edit')
+                ->url(static::getUrl('edit', ['record' => $record]), shouldOpenInNewTab: true),
+            Action::make('view')
+                ->url(static::getUrl('view', ['record' => $record])),
+        ];
+    }
+    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    {
+        return $record->name . ' (' . $record->short_name . ')';
+    }
+    public static function getNavigationLabel(): string
+    {
+        return trans('fuse::fuse.resource.company.label');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return trans('fuse::fuse.resource.company.label');
+    }
+
+    public static function getLabel(): string
+    {
+        return trans('fuse::fuse.resource.company.single');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return trans('fuse::fuse.resource.company.group');
+    }
+
+    public function getTitle(): string
+    {
+        return trans('fuse::fuse.resource.company.title.resource');
+    }
+
+
 
     public static function form(Form $form): Form
     {
@@ -32,8 +86,11 @@ class CompanyResource extends Resource
                     ->maxLength(255),
                 Forms\Components\RichEditor::make('address')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('logo')
-                    ->maxLength(255),
+                    Forms\Components\FileUpload::make('logo')
+                            ->image()
+                            ->avatar()
+                            ->downloadable()
+                            ->openable(),
             ]);
     }
 
@@ -41,34 +98,45 @@ class CompanyResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('short_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+
+    Tables\Columns\Layout\Split::make([
+                    Tables\Columns\ImageColumn::make('logo')
+                    ->circular()
+                    ->grow(false),
+                    Tables\Columns\Layout\Stack::make([
+                        Tables\Columns\TextColumn::make('name')
+                    ->weight(FontWeight::Bold),
+                    Tables\Columns\TextColumn::make('short_name')
+
+                    ->iconColor('secondary')
+                    ->icon('heroicon-o-identification'),
+
+                    ]),
+
+                ]),
+                Tables\Columns\Layout\Panel::make([
+
                     Tables\Columns\TextColumn::make('address')
-                    ->limit(50)
-                    ->html(),
-                Tables\Columns\TextColumn::make('logo')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->iconColor('secondary')
+                    ->icon('heroicon-o-document-text')
+                    ->html()
+
+
+                ])->collapsible(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                ->visible(fn ():bool=>auth()->user()->can('viewAny_company')),
+                Tables\Actions\EditAction::make()
+                ->visible(fn ():bool=>auth()->user()->can('update_company')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                    ->visible(fn ():bool=>auth()->user()->can('delete_bulk_company')),
                 ]),
             ]);
     }

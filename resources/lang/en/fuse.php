@@ -1,22 +1,27 @@
 <?php
 return [
     'resource.user.label' => 'Users',
-    'resource.user.group' => 'Manage',
+    'resource.user.group' => 'Employment',
     'resource.user.title' => 'Users',
 
     "resource.user.id" => "ID",
-    "resource.user.single" => "User",
+    "resource.user.single" => "Assign",
     "resource.user.email_verified_at" => "Email Verified",
     "resource.user.created_at" => "Created At",
     "resource.user.updated_at" => "Updated At",
     "resource.user.verified" => "Verified",
     "resource.user.unverified" => "Unverified",
     "resource.user.name" => "Name",
-    "resource.user.role" => "Role",
     "resource.user.email" => "Email",
     "resource.user.password" => "Password",
     "resource.user.roles" => "Roles",
-    "resource.user.label" => "Users",
+    "resource.user.role"=> "Role",
+    "resource.user.phone"=> "Phone",
+    "resource.user.gender"=> "Gender",
+    "resource.user.address"=> "Address",
+    "resource.user.label" => "User",
+    'resource.user.female' => "Female",
+    'resource.user.male' => "Male",
 
     "resource.user.title.show" => "Show User",
     "resource.user.title.delete" => "Delete User",
@@ -26,13 +31,14 @@ return [
     "resource.user.title.list" => "Users",
     "resource.user.title.home" => "Users",
     "resource.user.sections.user_details" => "User Information",
+    "resource.user.sections.user_details_description" => "Personal information for this user.",
     "resource.user.sections.permissions" => "Permissions Viewer",
     "resource.user.messages.permissions_view"=> "Permission information for this user.",
     "resource.user.permissions" => "Permissions",
     "resource.user.messages.permissions_create"=> "Create permissions for this user.",
 
     'resource.role.label' => 'Roles',
-    'resource.role.group' => 'Manage',
+    'resource.role.group' => 'Settings',
     'resource.role.title' => 'Roles',
 
     "resource.role.id" => "ID",
@@ -59,7 +65,7 @@ return [
     "resource.role.title.home" => "Roles",
 
     'resource.permission.label' => 'Permissions',
-    'resource.permission.group' => 'Manage',
+    'resource.permission.group' => 'Settings',
     'resource.permission.title' => 'Permissions',
 
     "resource.permission.id" => "ID",
@@ -82,5 +88,9 @@ return [
     "resource.permission.title.create" => "Create User",
     "resource.permission.title.edit" => "Edit User",
     "resource.permission.title.list" => "Permissions",
-    "resource.permission.title.home" => "Permissions"
+    "resource.permission.title.home" => "Permissions",
+
+    'resource.company.label' => 'Companies',
+    'resource.company.group' => 'Employment',
+    'resource.company.title' => 'Companies',
 ];

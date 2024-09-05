@@ -9,9 +9,11 @@ use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\Summarizers\Count;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Fields\PermissionGroup;
 class RoleResource extends Resource
 {
@@ -44,14 +46,22 @@ class RoleResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                    ->label(__('fuse::fuse.resource.role.id'))
-                    ->sortable(),
+                TextColumn::make('#')
+    ->rowIndex(),
+                // TextColumn::make('id')
+                //     ->label(__('fuse::fuse.resource.role.id'))
+                //     ->sortable(),
                 TextColumn::make('description')
                     ->label(__('fuse::fuse.resource.role.description'))
                     ->getStateUsing(static fn ($record) => __($record->name)),
                 TextColumn::make('name')
+
+                ->summarize(Count::make()->label('Total')->prefix('Roles : '))
                     ->label(__('fuse::fuse.resource.role.name'))
+                    ->searchable(),
+                    TextColumn::make('permissions')
+                    ->getStateUsing(static fn ($record) => (string)$record->permissions()->count())
+                    ->label(__('fuse::fuse.resource.role.permissions'))
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->label(__('fuse::fuse.resource.role.created_at'))

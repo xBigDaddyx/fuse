@@ -1,5 +1,7 @@
 <?php
 namespace Xbigdaddyx\Fuse\Domain\User\Models;
+
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -12,10 +14,16 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 use Xbigdaddyx\Fuse\Domain\Company\Models\Company;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Xbigdaddyx\Fuse\Domain\User\Traits\HasProfileAvatar;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerifyEmail
+class User extends Authenticatable implements FilamentUser,HasTenants, HasAvatar, MustVerifyEmail
 {
-    use HasRoles,Notifiable;
+    use HasRoles,Notifiable,HasProfileAvatar;
     public function canAccessPanel(Panel $panel): bool
     {
         //return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
@@ -49,6 +57,30 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
     }
     public function companies(): BelongsToMany
     {
-        return $this->belongsToMany(Company::class, 'user_company');
+        return $this->belongsToMany(Company::class, 'user_company')->withPivot(['employee_id','department','job_title'])->withTimestamps();
     }
+    public function company():BelongsTo{
+        return $this->belongsTo(Company::class);
+    }
+    public function userCompany():HasMany{
+        return $this->hasMany(UserCompany::class);
+    }
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->companies;
+    }
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->companies()->whereKey($tenant)->exists();
+    }
+    public function scopeVerified(Builder $query): void
+    {
+        $query->where('email_verified_at','!=', null);
+    }
+    public function scopeUnverified(Builder $query): void
+    {
+        $query->where('email_verified_at', null);
+    }
+
+
 }

@@ -14,10 +14,13 @@ use Filament\Actions\ActionGroup;
 use Filament\Pages\Dashboard\Concerns\HasFiltersAction;
 use Filament\Support\Enums\ActionSize;
 
-class Dashboard extends \Filament\Pages\Dashboard
+
+class PulseDashboard extends \Filament\Pages\Dashboard
 {
     use HasFiltersAction;
-
+    protected static string $routePath = 'pulse';
+    protected static ?string $title = 'System Monitor';
+    protected static ?string $navigationIcon = 'heroicon-o-bolt';
     public function getColumns(): int|string|array
     {
         return 12;
@@ -47,12 +50,14 @@ class Dashboard extends \Filament\Pages\Dashboard
         return [
             PulseServers::class,
             PulseCache::class,
+
             PulseExceptions::class,
             PulseUsage::class,
             PulseQueues::class,
             PulseSlowQueries::class,
             PulseSlowRequests::class,
-            PulseSlowOutGoingRequests::class
+            PulseSlowOutGoingRequests::class,
+
         ];
     }
 }

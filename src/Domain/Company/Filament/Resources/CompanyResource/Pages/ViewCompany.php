@@ -13,7 +13,8 @@ class ViewCompany extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            Actions\EditAction::make()
+            ->visible(fn ():bool=>auth()->user()->can('update_company')),
         ];
     }
 }

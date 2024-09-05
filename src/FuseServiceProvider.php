@@ -10,6 +10,14 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
+use Livewire\Livewire;
+use Vcian\Pulse\PulseActiveSessions\Livewire\PulseActiveSessions;
+use Xbigdaddyx\Fuse\Domain\System\Filament\Widgets\PulseSchedule;
+use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\PulseActiveSessionsCard;
+use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\UserStats;
+use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\UserSummaryUnverifiedChart;
+use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\UserSummaryVerifiedChart;
+
 class FuseServiceProvider extends PackageServiceProvider
 {
 
@@ -97,17 +105,13 @@ class FuseServiceProvider extends PackageServiceProvider
             // Event::listen(CorrectionCreatedEvent::class, SendCorrectionCreatedNotification::class);
             // $this->callAfterResolving(BladeCompiler::class, function () {
 
-            //     if (class_exists(Livewire::class)) {
-            //         // Livewire::component('search-carton', SearchCarton::class);
-            //         // Livewire::component('verification-carton', VerificationCarton::class);
-            //         // Livewire::component('fuse-polybag-attributes', FusePolybagAttributes::class);
-            //         // Livewire::component('fuse-polybag-stats', FusePolybagStats::class);
-            //         // Livewire::component('fuse-polybag-table', FusePolybagTable::class);
-            //         // Livewire::component('status', Status::class);
-            //         // Livewire::component('paginator', RevisionsPaginator::class);
-            //         // Livewire::component('version', Version::class);
-            //     }
-            // });
+                if (class_exists(Livewire::class)) {
+                    Livewire::component('user-summary-verified-chart', UserSummaryVerifiedChart::class);
+                    Livewire::component('user-summary-unverified-chart', UserSummaryUnverifiedChart::class);
+                    Livewire::component('xbigdaddyx.fuse.domain.system.filament.widgets.pulse-schedule',PulseSchedule::class);
+                    Livewire::component('user-stats', UserStats::class);
+                }
+
             // Gate::policy(Issue::class, IssuePolicy::class);
             // Gate::policy(Area::class, AreaPolicy::class);
             // Gate::policy(Resolution::class, ResolutionPolicy::class);
