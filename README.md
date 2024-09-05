@@ -5,7 +5,7 @@ This is package Multi-Tenancy, User and Employee Management for Teresa.
 <div class="filament-hidden">
 
 ![Screenshot of Application Feature](./assets/fuse_01.png)
-![Screenshot of Application Feature](./assets/fuse_01.png)
+![Screenshot of Application Feature](./assets/fuse_02.png)
 </div>
 
 <!-- ## Installation
