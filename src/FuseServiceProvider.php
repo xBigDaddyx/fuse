@@ -154,7 +154,7 @@ class FuseServiceProvider extends PackageServiceProvider
         protected function getAssets(): array
         {
             return [
-                Css::make('fuse-theme', __DIR__ . '/../resources/dist/filament/fuse-theme.css'),
+                // Css::make('fuse-theme', __DIR__ . '/../resources/dist/filament/fuse-theme.css'),
                 // Css::make('fuse-style', __DIR__ . '/../resources/dist/fuse-theme.css'),
                 // // AlpineComponent::make('filament-approvals', __DIR__ . '/../resources/dist/components/filament-approvals.js'),
                 // Css::make('Fuse-styles', __DIR__ . '/../resources/dist/Fuse.css'),

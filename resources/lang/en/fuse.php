@@ -93,4 +93,8 @@ return [
     'resource.company.label' => 'Companies',
     'resource.company.group' => 'Employment',
     'resource.company.title' => 'Companies',
+
+    'resource.panel.label' => 'Panels',
+    'resource.panel.group' => 'Settings',
+    'resource.panel.title' => 'Panels',
 ];

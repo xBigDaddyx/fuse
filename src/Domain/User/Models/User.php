@@ -20,14 +20,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Xbigdaddyx\Fuse\Domain\User\Traits\HasProfileAvatar;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+use Xbigdaddyx\Fuse\Domain\System\Models\Panel as ModelsPanel;
+use Devdojo\Auth\Models\User as AuthUser;
 
-class User extends Authenticatable implements FilamentUser,HasTenants, HasAvatar, MustVerifyEmail
+class User extends AuthUser implements FilamentUser,HasTenants, HasAvatar, MustVerifyEmail
 {
-    use HasRoles,Notifiable,HasProfileAvatar;
+    use HasRoles,Notifiable,HasProfileAvatar,LogsActivity;
     public function canAccessPanel(Panel $panel): bool
     {
         //return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
-        return $this->hasVerifiedEmail();
+        $panels = ModelsPanel::all();
+        foreach ($panels as $key => $value) {
+            $user_panels = auth()->user()->panels;
+            if($user_panels->contains('registered_panel_id',$value->registered_panel_id)){
+                return true;
+            }
+
+        }
+        return false;
+        //return $this->hasVerifiedEmail();
     }
     protected $fillable = [
         'name',
@@ -35,7 +48,11 @@ class User extends Authenticatable implements FilamentUser,HasTenants, HasAvatar
         'password',
         'avatar_url',
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'email','password','avatar_url','roles','email_verified_at'])->logOnlyDirty();
+    }
     protected $hidden = [
         'remember_token',
         'password'
@@ -80,6 +97,9 @@ class User extends Authenticatable implements FilamentUser,HasTenants, HasAvatar
     public function scopeUnverified(Builder $query): void
     {
         $query->where('email_verified_at', null);
+    }
+    public function panels():BelongsToMany{
+        return $this->belongsToMany(ModelsPanel::class,'user_panel');
     }
 
 

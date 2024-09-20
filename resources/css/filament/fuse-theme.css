@@ -29,7 +29,7 @@
     @apply dark:text-white;
 }
 .fi-layout {
-    @apply  bg-gradient-to-l from-primary-200 to-primary-100 dark:from-primary-800 dark:to-primary-950 !important
+    @apply  bg-gradient-to-l from-primary-200 to-primary-100 dark:from-primary-950 dark:to-primary-950 !important
 }
 .fi-topbar nav {
     @apply dark:bg-gray-800 bg-white my-4 ring-0 shadow-md mx-2 rounded-xl max-w-full mx-auto !important

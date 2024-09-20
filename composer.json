@@ -18,13 +18,20 @@
     ],
     "require": {
         "php": "^8.3",
+        "charrafimed/global-search-modal": "^3.0",
+        "chrisreedio/socialment": "^3.9",
+        "devdojo/auth": "*",
         "filament/filament": "^3.0",
         "hosmelq/laravel-pulse-schedule": "^0.2.2",
         "illuminate/contracts": "^10.0||^11.0",
         "joaopaulolndev/filament-edit-profile": "^1.0",
+        "rmsramos/activitylog": "^1.0",
+        "socialiteproviders/google": "^4.1",
+        "socialiteproviders/microsoft-azure": "^5.2",
         "spatie/laravel-package-tools": "^1.16",
         "spatie/laravel-permission": "^6.0",
-        "stechstudio/filament-impersonate": "^3.0"
+        "stechstudio/filament-impersonate": "^3.0",
+        "wildside/userstamps": "^2.4"
     },
     "require-dev": {
         "eightynine/filament-advanced-widgets": "^3.0",
@@ -84,7 +91,7 @@
         "laravel": {
             "providers": [
                 "Xbigdaddyx\\Fuse\\FuseServiceProvider",
-                 "Xbigdaddyx\\Fuse\\FusePanelServiceProvider"
+                "Xbigdaddyx\\Fuse\\FusePanelServiceProvider"
             ],
             "aliases": {
                 "Fuse": "Xbigdaddyx\\Fuse\\Facades\\Fuse"

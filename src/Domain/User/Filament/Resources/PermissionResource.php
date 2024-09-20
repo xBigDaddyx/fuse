@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Xbigdaddyx\Fuse\Domain\User\Filament\Resources;
 
@@ -32,6 +34,9 @@ class PermissionResource extends Resource
             ->schema([
 
                 TextInput::make('name')
+                ->prefixIcon('heroicon-m-pencil')
+                        ->prefixIconColor('primary')
+                        ->helperText('example : view_xxxx')
                     ->label(__('fuse::fuse.resource.permission.name'))
                     ->validationAttribute(__('fuse::fuse.resource.permission.name'))
                     ->required()
@@ -39,7 +44,7 @@ class PermissionResource extends Resource
                     ->unique(
                         config('permission.table_names.permissions'),
                         'name',
-                        static fn (?Permission $record): ?Permission => $record,
+                        static fn(?Permission $record): ?Permission => $record,
                     ),
 
             ]);
@@ -55,8 +60,9 @@ class PermissionResource extends Resource
                     ->sortable(),
                 TextColumn::make('description')
                     ->label(__('fuse::fuse.resource.permission.description'))
-                    ->getStateUsing(static fn (Permission $record) => __($record->name)),
+                    ->getStateUsing(static fn(Permission $record) => __($record->name)),
                 TextColumn::make('name')
+
                     ->label(__('fuse::fuse.resource.permission.name'))
                     ->searchable(),
                 TextColumn::make('created_at')
@@ -64,7 +70,11 @@ class PermissionResource extends Resource
                     ->dateTime(),
 
             ])
-            ->actions([EditAction::make()])
+            ->actions(
+                [
+                    EditAction::make()
+                ]
+            )
             ->bulkActions([BulkActionGroup::make([DeleteBulkAction::make()])])
             ->filters([]);
     }

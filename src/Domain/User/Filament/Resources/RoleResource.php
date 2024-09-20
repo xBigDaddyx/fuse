@@ -36,9 +36,9 @@ class RoleResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->unique(config('permission.table_names.roles'), 'name', static fn ($record) => $record),
-                PermissionGroup::make('permissions')
-                    ->label(__('fuse::fuse.resource.role.permissions'))
-                    ->validationAttribute(__('fuse::fuse.resource.role.permissions')),
+                // PermissionGroup::make('permissions')
+                //     ->label(__('fuse::fuse.resource.role.permissions'))
+                //     ->validationAttribute(__('fuse::fuse.resource.role.permissions')),
             ]);
     }
 
@@ -101,5 +101,11 @@ class RoleResource extends Resource
     public static function getNavigationGroup(): ?string
     {
         return __('fuse::fuse.resource.role.group');
+    }
+    public static function getRelations(): array
+    {
+        return [
+            RoleResource\RelationManagers\PermissionsRelationManager::class,
+        ];
     }
 }

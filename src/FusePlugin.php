@@ -5,6 +5,7 @@ namespace Xbigdaddyx\Fuse;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Xbigdaddyx\Fuse\Domain\Company\Filament\Resources\CompanyResource;
+use Xbigdaddyx\Fuse\Domain\System\Filament\Resources\PanelResource;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Resources\UserResource;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Resources\RoleResource;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Resources\PermissionResource;
@@ -29,6 +30,7 @@ class FusePlugin implements Plugin
                 RoleResource::class,
                 PermissionResource::class,
                 CompanyResource::class,
+                PanelResource::class,
             ]);
     }
 

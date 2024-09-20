@@ -3,7 +3,7 @@
 namespace Xbigdaddyx\Fuse\Domain\User\Filament\Resources;
 
 use Filament\Forms;
-use App\Models\User;
+
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Filament\Facades\Filament;
@@ -47,6 +47,8 @@ use Filament\Forms\Components\Split as ComponentsSplit;
 use Filament\Tables\Columns\Summarizers\Count;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Xbigdaddyx\Fuse\Domain\Company\Models\Company;
+use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
+use Xbigdaddyx\Fuse\Domain\User\Models\User;
 
 class UserResource extends Resource
 {
@@ -413,7 +415,16 @@ class UserResource extends Resource
             ])
             ->actions([
                 Impersonate::make(),
-
+                ActivityLogTimelineTableAction::make('Activities')
+                ->timelineIcons([
+                    'created' => 'heroicon-m-check-badge',
+                    'updated' => 'heroicon-m-pencil-square',
+                ])
+                ->timelineIconColors([
+                    'created' => 'info',
+                    'updated' => 'warning',
+                ])
+                ->withRelations(['roles']),
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make()
@@ -425,6 +436,7 @@ class UserResource extends Resource
     {
         return [
             UserResource\RelationManagers\CompaniesRelationManager::class,
+            UserResource\RelationManagers\PanelsRelationManager::class,
         ];
     }
     public static function getPages(): array

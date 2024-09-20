@@ -18,6 +18,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Enums\MaxWidth;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use Filament\View\PanelsRenderHook;
+
 
 class FusePanelServiceProvider extends PanelProvider
 {
@@ -25,13 +27,14 @@ class FusePanelServiceProvider extends PanelProvider
     {
         return $panel
         ->default()
-        ->id('admin')
-        ->path('admin')
+        ->id('fuse')
+        ->path('fuse')
         ->emailVerification()
         // ->profile(Domain\User\Filament\Pages\Auth\Profile::class)
         ->unsavedChangesAlerts()
         ->passwordReset()
-        // ->viteTheme('resources/css/filament/fuse-theme.css')
+
+        // ->viteTheme('resources/css/filament/fuse/theme.css')
         ->topNavigation()
         // ->spa()
         ->maxContentWidth(MaxWidth::Full)
@@ -56,6 +59,14 @@ class FusePanelServiceProvider extends PanelProvider
         ->colors([
             'primary' => '#306E6D','secondary'=>'#F9B218'
         ])->plugins([
+
+\Rmsramos\Activitylog\ActivitylogPlugin::make()
+->navigationGroup('Settings')
+->navigationSort(3),
+            \CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin::make()
+            ->highlighter(false),
+            \ChrisReedIO\Socialment\SocialmentPlugin::make()
+            ->registerProvider('azure', 'fab-microsoft', 'Sign in with Microsoft'),
             \Xbigdaddyx\Fuse\FusePlugin::make(),
             \Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin::make(),
             \Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin::make()
