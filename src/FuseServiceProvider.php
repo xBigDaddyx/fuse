@@ -110,7 +110,7 @@ class FuseServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-
+        $this->publishes([__DIR__ . '/../public/vendor/xbigdaddyx/assets' => public_path('vendor/xbigdaddyx/assets')], 'fuse-assets');
         //Event::listen(CartonBoxStatusUpdated::class, CartonBoxStatusListener::class);
         // Event::listen(IssueCreatedEvent::class, SendIssueCreatedNotification::class);
         // Event::listen(IssuePendingEvent::class, SendIssuePendingNotification::class);
