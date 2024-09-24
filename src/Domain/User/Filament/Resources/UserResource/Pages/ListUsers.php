@@ -27,7 +27,7 @@ class ListUsers extends ListRecords
     }
     public function getTabs(): array
     {
-        if(config('fuse.have_tenant')){
+        if (config('fuse.have_tenant')) {
             return [
                 'all' => Tab::make(),
                 'verified' => Tab::make()
@@ -51,7 +51,7 @@ class ListUsers extends ListRecords
                 ->badgeColor('success')
                 ->icon('heroicon-m-check-badge')
                 ->iconPosition(IconPosition::Before)
-                ->modifyQueryUsing(fn(Builder $query) => $query->verified()),
+                ->modifyQueryUsing(fn(Builder $query) => $query->verified()->count()),
             'unverified' => Tab::make()
                 ->badge(User::query()->unverified())
                 ->badgeColor('danger')
