@@ -21,12 +21,28 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Enums\MaxWidth;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Filament\View\PanelsRenderHook;
-
+use Illuminate\Support\Facades\Config;
 
 class FusePanelServiceProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        if (config('fuse.have_tenant')) {
+            $panel
+                ->tenantMenuItems([
+                    'register' => MenuItem::make()->label('Register new company')
+                        ->visible(fn(): bool => auth()->user()->hasRole('super-admin')),
+                    'profile' => MenuItem::make()->label('Company profile'),
+                ])
+
+                // ->tenantMiddleware([
+                //     ApplyTenantScopes::class,
+                // ], isPersistent: true)
+                //->tenantRoutePrefix('company')
+                ->tenant(\Xbigdaddyx\Fuse\Domain\Company\Models\Company::class, 'short_name', 'company')
+                // ->tenantRegistration(RegisterCompany::class)
+                ->tenantProfile(\Xbigdaddyx\Fuse\Domain\System\Filament\Pages\EditCompanyProfile::class);
+        }
         return $panel
             ->default()
             ->id('fuse')
@@ -119,19 +135,6 @@ class FusePanelServiceProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->tenantMenuItems([
-                'register' => MenuItem::make()->label('Register new company')
-                    ->visible(fn(): bool => auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('Information Technology')),
-                'profile' => MenuItem::make()->label('Company profile'),
-            ])
-
-            // ->tenantMiddleware([
-            //     ApplyTenantScopes::class,
-            // ], isPersistent: true)
-            //->tenantRoutePrefix('company')
-            ->tenant(\Xbigdaddyx\Fuse\Domain\Company\Models\Company::class, 'short_name', 'company')
-            // ->tenantRegistration(RegisterCompany::class)
-            ->tenantProfile(\Xbigdaddyx\Fuse\Domain\System\Filament\Pages\EditCompanyProfile::class);
+            ]);
     }
 }
