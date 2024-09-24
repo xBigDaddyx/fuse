@@ -27,16 +27,33 @@ class ListUsers extends ListRecords
     }
     public function getTabs(): array
     {
+        if(config('fuse.have_tenant')){
+            return [
+                'all' => Tab::make(),
+                'verified' => Tab::make()
+                    ->badge(User::query()->verified()->where('company_id', Filament::getTenant()->id)->count())
+                    ->badgeColor('success')
+                    ->icon('heroicon-m-check-badge')
+                    ->iconPosition(IconPosition::Before)
+                    ->modifyQueryUsing(fn(Builder $query) => $query->verified()),
+                'unverified' => Tab::make()
+                    ->badge(User::query()->unverified()->where('company_id', Filament::getTenant()->id)->count())
+                    ->badgeColor('danger')
+                    ->icon('heroicon-m-x-circle')
+                    ->iconPosition(IconPosition::Before)
+                    ->modifyQueryUsing(fn(Builder $query) => $query->unverified()),
+            ];
+        }
         return [
             'all' => Tab::make(),
             'verified' => Tab::make()
-                ->badge(User::query()->verified()->where('company_id', Filament::getTenant()->id)->count())
+                ->badge(User::query()->verified())
                 ->badgeColor('success')
                 ->icon('heroicon-m-check-badge')
                 ->iconPosition(IconPosition::Before)
                 ->modifyQueryUsing(fn(Builder $query) => $query->verified()),
             'unverified' => Tab::make()
-                ->badge(User::query()->unverified()->where('company_id', Filament::getTenant()->id)->count())
+                ->badge(User::query()->unverified())
                 ->badgeColor('danger')
                 ->icon('heroicon-m-x-circle')
                 ->iconPosition(IconPosition::Before)

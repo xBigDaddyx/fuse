@@ -15,7 +15,12 @@ class UserStats extends BaseWidget
     {
         $users = User::where('company_id',Filament::getTenant()->id);
         $companies = Company::all();
-       $unverified = User::unverified()->where('company_id',Filament::getTenant()->id)->count();
+        if(config('fuse.have_tenant')){
+            $unverified = User::unverified()->where('company_id',Filament::getTenant()->id)->count();
+        }else{
+            $unverified = User::unverified()->count();
+        }
+
         return [
             Stat::make('Total Users', $users->count())->icon('heroicon-o-user')
 
