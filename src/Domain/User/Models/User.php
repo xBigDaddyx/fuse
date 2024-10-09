@@ -1,4 +1,5 @@
 <?php
+
 namespace Xbigdaddyx\Fuse\Domain\User\Models;
 
 
@@ -24,20 +25,20 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Xbigdaddyx\Fuse\Domain\System\Models\Panel as ModelsPanel;
 use Devdojo\Auth\Models\User as AuthUser;
+use Xbigdaddyx\Falcon\Traits\HasAssets;
 
-class User extends AuthUser implements FilamentUser,HasTenants, HasAvatar, MustVerifyEmail
+class User extends AuthUser implements FilamentUser, HasTenants, HasAvatar, MustVerifyEmail
 {
-    use HasRoles,Notifiable,HasProfileAvatar,LogsActivity;
+    use HasRoles, Notifiable, HasProfileAvatar, LogsActivity, HasAssets;
     public function canAccessPanel(Panel $panel): bool
     {
         //return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
         $panels = ModelsPanel::all();
         foreach ($panels as $key => $value) {
             $user_panels = auth()->user()->panels;
-            if($user_panels->contains('registered_panel_id',$value->registered_panel_id)){
+            if ($user_panels->contains('registered_panel_id', $value->registered_panel_id)) {
                 return true;
             }
-
         }
         return false;
         //return $this->hasVerifiedEmail();
@@ -51,7 +52,7 @@ class User extends AuthUser implements FilamentUser,HasTenants, HasAvatar, MustV
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly(['name', 'email','password','avatar_url','roles','email_verified_at'])->logOnlyDirty();
+            ->logOnly(['name', 'email', 'password', 'avatar_url', 'roles', 'email_verified_at'])->logOnlyDirty();
     }
     protected $hidden = [
         'remember_token',
@@ -74,12 +75,14 @@ class User extends AuthUser implements FilamentUser,HasTenants, HasAvatar, MustV
     }
     public function companies(): BelongsToMany
     {
-        return $this->belongsToMany(Company::class, 'user_company')->withPivot(['employee_id','department','job_title'])->withTimestamps();
+        return $this->belongsToMany(Company::class, 'user_company')->withPivot(['employee_id', 'department', 'job_title'])->withTimestamps();
     }
-    public function company():BelongsTo{
+    public function company(): BelongsTo
+    {
         return $this->belongsTo(Company::class);
     }
-    public function userCompany():HasMany{
+    public function userCompany(): HasMany
+    {
         return $this->hasMany(UserCompany::class);
     }
     public function getTenants(Panel $panel): Collection
@@ -92,15 +95,14 @@ class User extends AuthUser implements FilamentUser,HasTenants, HasAvatar, MustV
     }
     public function scopeVerified(Builder $query): void
     {
-        $query->where('email_verified_at','!=', null);
+        $query->where('email_verified_at', '!=', null);
     }
     public function scopeUnverified(Builder $query): void
     {
         $query->where('email_verified_at', null);
     }
-    public function panels():BelongsToMany{
-        return $this->belongsToMany(ModelsPanel::class,'user_panel');
+    public function panels(): BelongsToMany
+    {
+        return $this->belongsToMany(ModelsPanel::class, 'user_panel');
     }
-
-
 }

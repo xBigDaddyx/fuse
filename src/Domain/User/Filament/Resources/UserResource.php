@@ -58,12 +58,12 @@ class UserResource extends Resource
     protected static bool $isScopedToTenant = true;
     protected static ?string $navigationIcon = 'heroicon-o-users';
     public static function getGlobalSearchEloquentQuery(): Builder
-{
-    return parent::getGlobalSearchEloquentQuery()->with(['companies']);
-}
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['companies']);
+    }
     public static function getGloballySearchableAttributes(): array
     {
-            return [ 'name', 'email'];
+        return ['name', 'email'];
     }
     public static function getGlobalSearchResultDetails(Model $record): array
     {
@@ -128,16 +128,16 @@ class UserResource extends Resource
                             Section::make('Credential')
                                 ->schema([
                                     TextInput::make('email')
-                                    ->prefixIcon('heroicon-m-envelope')
-    ->prefixIconColor('primary')
+                                        ->prefixIcon('heroicon-m-envelope')
+                                        ->prefixIconColor('primary')
                                         ->label(__('fuse::fuse.resource.user.email'))
                                         ->validationAttribute(__('fuse::fuse.resource.user.email'))
                                         ->required()
                                         ->email(),
                                     TextInput::make('password')
-                                    ->prefixIcon('heroicon-m-key')
-                                    ->prefixIconColor('primary')
-                                    ->autocomplete(false)
+                                        ->prefixIcon('heroicon-m-key')
+                                        ->prefixIconColor('primary')
+                                        ->autocomplete(false)
                                         ->hiddenOn('edit')
                                         ->label(__('fuse::fuse.resource.user.password'))
                                         ->password()
@@ -168,16 +168,16 @@ class UserResource extends Resource
                             Section::make('Credential')
                                 ->schema([
                                     TextInput::make('email')
-                                    ->prefixIcon('heroicon-m-envelope')
-                                    ->prefixIconColor('primary')
+                                        ->prefixIcon('heroicon-m-envelope')
+                                        ->prefixIconColor('primary')
                                         ->label(__('fuse::fuse.resource.user.email'))
                                         ->validationAttribute(__('fuse::fuse.resource.user.email'))
                                         ->required()
                                         ->email(),
                                     TextInput::make('password')
-                                    ->prefixIcon('heroicon-m-key')
-                                    ->prefixIconColor('primary')
-                                    ->autocomplete(false)
+                                        ->prefixIcon('heroicon-m-key')
+                                        ->prefixIconColor('primary')
+                                        ->autocomplete(false)
                                         ->hiddenOn('edit')
                                         ->label(__('fuse::fuse.resource.user.password'))
                                         ->password()
@@ -189,32 +189,32 @@ class UserResource extends Resource
                                         }),
 
                                 ]),
-//                                 Section::make('Companies')
-//                                 ->schema([
-// Repeater::make('userCompany')
-// ->relationship()
-//     ->schema([
-//         Select::make('company_id')
-//         ->relationship('company','name')
-//         ->required(),
-//         Select::make('user_id')
-//         ->relationship('user','name')
-//         ->required(),
-//         Forms\Components\TextInput::make('employee_id')->required(),
-//         Forms\Components\TextInput::make('department')->required(),
-//         Forms\Components\TextInput::make('job_title'),
-//     ])
-//     ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
-//         $data['user_id'] = auth()->id();
+                            //                                 Section::make('Companies')
+                            //                                 ->schema([
+                            // Repeater::make('userCompany')
+                            // ->relationship()
+                            //     ->schema([
+                            //         Select::make('company_id')
+                            //         ->relationship('company','name')
+                            //         ->required(),
+                            //         Select::make('user_id')
+                            //         ->relationship('user','name')
+                            //         ->required(),
+                            //         Forms\Components\TextInput::make('employee_id')->required(),
+                            //         Forms\Components\TextInput::make('department')->required(),
+                            //         Forms\Components\TextInput::make('job_title'),
+                            //     ])
+                            //     ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
+                            //         $data['user_id'] = auth()->id();
 
-//         return $data;
-//     })
-//     ->collapsible()
-//     ->reorderableWithDragAndDrop(false)
-//     ->reorderable(false)
-//     ->addActionLabel('Assign companies')
-//     ->columns(2)
-//                                 ]),
+                            //         return $data;
+                            //     })
+                            //     ->collapsible()
+                            //     ->reorderableWithDragAndDrop(false)
+                            //     ->reorderable(false)
+                            //     ->addActionLabel('Assign companies')
+                            //     ->columns(2)
+                            //                                 ]),
                             // Section::make(__('fuse::fuse.resource.user.sections.permissions'))
                             //     ->description(__('fuse::fuse.resource.user.messages.permissions_create'))
                             //     ->schema([
@@ -254,32 +254,32 @@ class UserResource extends Resource
                 ])->grow(false),
                 Group::make([
 
-                        TextInput::make('name')
+                    TextInput::make('name')
                         ->prefixIcon('heroicon-m-pencil')
                         ->prefixIconColor('primary')
-                            ->label(__('fuse::fuse.resource.user.name'))
-                            ->required(),
-                            TextInput::make('phone')
-                            ->prefixIcon('heroicon-m-phone')
-                            ->prefixIconColor('primary')
-                            ->tel()
-                            ->label(__('fuse::fuse.resource.user.phone')),
-                            Radio::make('gender')
+                        ->label(__('fuse::fuse.resource.user.name'))
+                        ->required(),
+                    TextInput::make('phone')
+                        ->prefixIcon('heroicon-m-phone')
+                        ->prefixIconColor('primary')
+                        ->tel()
+                        ->label(__('fuse::fuse.resource.user.phone')),
+                    Radio::make('gender')
 
-                            ->label(__('fuse::fuse.resource.user.gender'))
-                            ->options([
-                                'f' => 'Female',
-                                'm' => 'Male',
-                            ]),
-                        RoleSelect::make('role')
+                        ->label(__('fuse::fuse.resource.user.gender'))
+                        ->options([
+                            'f' => 'Female',
+                            'm' => 'Male',
+                        ]),
+                    RoleSelect::make('role')
                         ->prefixIcon('heroicon-m-check-badge')
                         ->prefixIconColor('primary')
-                            ->label(__('fuse::fuse.resource.user.role'))
-                            ->validationAttribute(__('fuse::fuse.resource.user.role')),
-                            RichEditor::make('address')
+                        ->label(__('fuse::fuse.resource.user.role'))
+                        ->validationAttribute(__('fuse::fuse.resource.user.role')),
+                    RichEditor::make('address')
 
-                            ->columnSpanFull()
-                            ->label(__('fuse::fuse.resource.user.address')),
+                        ->columnSpanFull()
+                        ->label(__('fuse::fuse.resource.user.address')),
 
                 ])->columns(2)
             ]),
@@ -291,7 +291,7 @@ class UserResource extends Resource
     protected static function detailsSection(): Section
     {
         return Section::make(__('fuse::fuse.resource.user.sections.user_details'))
-        ->description(__('fuse::fuse.resource.user.sections.user_details_description'))
+            ->description(__('fuse::fuse.resource.user.sections.user_details_description'))
             ->schema(static::detailsSectionSchema());
     }
     // protected static function evaluateMinDate(Component $livewire): null|Carbon|CarbonImmutable
@@ -348,7 +348,7 @@ class UserResource extends Resource
                 ]),
                 Panel::make([
                     TextColumn::make('email')
-                    ->color('primary')
+                        ->color('primary')
                         ->icon('heroicon-o-envelope')
                         ->sortable()
                         ->searchable()
@@ -359,9 +359,9 @@ class UserResource extends Resource
                         ->color('secondary')
                         ->sortable()
                         ->grow(false),
-                        TextColumn::make('gender')
-                        ->formatStateUsing(function (string $state){
-                            if($state === 'm'){
+                    TextColumn::make('gender')
+                        ->formatStateUsing(function (string $state) {
+                            if ($state === 'm') {
                                 return "Male";
                             }
                             return "Female";
@@ -370,7 +370,7 @@ class UserResource extends Resource
 
                         ->sortable()
                         ->grow(false),
-                        TextColumn::make('address')
+                    TextColumn::make('address')
                         ->icon('heroicon-o-building-storefront')
 
                         ->sortable()
@@ -416,15 +416,15 @@ class UserResource extends Resource
             ->actions([
                 Impersonate::make(),
                 ActivityLogTimelineTableAction::make('Activities')
-                ->timelineIcons([
-                    'created' => 'heroicon-m-check-badge',
-                    'updated' => 'heroicon-m-pencil-square',
-                ])
-                ->timelineIconColors([
-                    'created' => 'info',
-                    'updated' => 'warning',
-                ])
-                ->withRelations(['roles']),
+                    ->timelineIcons([
+                        'created' => 'heroicon-m-check-badge',
+                        'updated' => 'heroicon-m-pencil-square',
+                    ])
+                    ->timelineIconColors([
+                        'created' => 'info',
+                        'updated' => 'warning',
+                    ])
+                    ->withRelations(['roles']),
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make()

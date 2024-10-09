@@ -60,9 +60,9 @@ class FusePanelServiceProvider extends PanelProvider
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->font('Poppins')
             ->sidebarCollapsibleOnDesktop()
-            ->brandLogo(asset('vendor/xbigdaddyx/assets/teresa_fuse_full_logo.png'))
+            ->brandLogo(asset('vendor/xbigdaddyx/fuse/assets/teresa_fuse_full_logo.png'))
             ->brandLogoHeight('3rem')
-            ->favicon(asset('vendor/xbigdaddyx/assets/teresa_fuse_logo.png'))
+            ->favicon(asset('vendor/xbigdaddyx/fuse/assets/teresa_fuse_logo.png'))
 
             ->userMenuItems([
                 'profile' => MenuItem::make()
@@ -85,7 +85,7 @@ class FusePanelServiceProvider extends PanelProvider
                 \CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin::make()
                     ->highlighter(false),
                 \ChrisReedIO\Socialment\SocialmentPlugin::make()
-                    ->registerProvider('azure', 'fab-microsoft', 'Sign in with Microsoft'),
+                    ->registerProvider('azure', 'microsoft', 'Sign in with Microsoft'),
                 \Xbigdaddyx\Fuse\FusePlugin::make(),
                 \Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin::make(),
                 \Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin::make()
