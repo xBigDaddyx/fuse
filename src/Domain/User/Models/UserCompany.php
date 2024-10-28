@@ -19,6 +19,15 @@ class UserCompany extends Pivot
         'department',
         'job_title'
     ];
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->employee_id = '-';
+            $model->department = '-';
+            $model->job_title = 'User';
+        });
+    }
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

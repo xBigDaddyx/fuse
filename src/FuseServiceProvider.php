@@ -17,6 +17,8 @@ use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\PulseActiveSessionsCard;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\UserStats;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\UserSummaryUnverifiedChart;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\UserSummaryVerifiedChart;
+use Xbigdaddyx\Fuse\Domain\User\Models\User;
+use Xbigdaddyx\Fuse\Domain\User\Observers\UserObserver;
 
 class FuseServiceProvider extends PackageServiceProvider
 {
@@ -111,7 +113,9 @@ class FuseServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->publishes([__DIR__ . '/../assets' => public_path('vendor/xbigdaddyx/assets')], 'fuse-assets');
-        //Event::listen(CartonBoxStatusUpdated::class, CartonBoxStatusListener::class);
+        User::observe(UserObserver::class);
+
+
         // Event::listen(IssueCreatedEvent::class, SendIssueCreatedNotification::class);
         // Event::listen(IssuePendingEvent::class, SendIssuePendingNotification::class);
         // Event::listen(IssueResolvedEvent::class, SendIssueResolvedNotification::class);

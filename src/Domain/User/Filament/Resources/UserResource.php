@@ -45,9 +45,11 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Split as ComponentsSplit;
 use Filament\Tables\Columns\Summarizers\Count;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Xbigdaddyx\Fuse\Domain\Company\Models\Company;
 use Rmsramos\Activitylog\Actions\ActivityLogTimelineTableAction;
+use Xbigdaddyx\Fuse\Domain\User\Events\UserRegisteredEvent;
 use Xbigdaddyx\Fuse\Domain\User\Models\User;
 
 class UserResource extends Resource
@@ -64,6 +66,10 @@ class UserResource extends Resource
     public static function getGloballySearchableAttributes(): array
     {
         return ['name', 'email'];
+    }
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
     public static function getGlobalSearchResultDetails(Model $record): array
     {
@@ -148,7 +154,7 @@ class UserResource extends Resource
                                                 : $record->password;
                                         }),
 
-                                ]),
+                                ])->column,
                             Section::make(__('fuse::fuse.resource.user.sections.permissions'))
                                 ->description(__('fuse::fuse.resource.user.messages.permissions_view'))
                                 ->schema([
@@ -188,7 +194,7 @@ class UserResource extends Resource
                                                 : $record->password;
                                         }),
 
-                                ]),
+                                ])->columns(2),
                             //                                 Section::make('Companies')
                             //                                 ->schema([
                             // Repeater::make('userCompany')
@@ -233,6 +239,7 @@ class UserResource extends Resource
         $form->schema($rows);
         return $form;
     }
+
     protected static function detailsSectionSchema(): array
     {
         return [
@@ -265,17 +272,25 @@ class UserResource extends Resource
                         ->tel()
                         ->label(__('fuse::fuse.resource.user.phone')),
                     Radio::make('gender')
-
+                        ->inlineLabel()
+                        ->inline()
                         ->label(__('fuse::fuse.resource.user.gender'))
                         ->options([
                             'f' => 'Female',
                             'm' => 'Male',
                         ]),
-                    RoleSelect::make('role')
-                        ->prefixIcon('heroicon-m-check-badge')
-                        ->prefixIconColor('primary')
-                        ->label(__('fuse::fuse.resource.user.role'))
-                        ->validationAttribute(__('fuse::fuse.resource.user.role')),
+                    \Novadaemon\FilamentCombobox\Combobox::make('roles')
+                        ->columnSpanFull()
+                        ->relationship('roles', 'name')
+                        ->boxSearchs()
+                        ->optionsLabel('Available roles')
+                        ->selectedLabel('Selected roles'),
+                    // RoleSelect::make('roles')
+                    //     ->hiddenOn('create')
+                    //     ->prefixIcon('heroicon-m-check-badge')
+                    //     ->prefixIconColor('primary')
+                    //     ->label(__('fuse::fuse.resource.user.role'))
+                    //     ->validationAttribute(__('fuse::fuse.resource.user.role')),
                     RichEditor::make('address')
 
                         ->columnSpanFull()
@@ -406,6 +421,7 @@ class UserResource extends Resource
                 'xl' => 4,
             ])
             ->filters([
+                Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\Filter::make('verified')
                     ->label(trans('fuse::fuse.resource.user.verified'))
                     ->query(fn(Builder $query): Builder => $query->whereNotNull('email_verified_at')),
@@ -424,12 +440,30 @@ class UserResource extends Resource
                         'created' => 'info',
                         'updated' => 'warning',
                     ])
+                    ->visible(fn(): bool => auth()->user()->can('view_activity_user'))
                     ->withRelations(['roles']),
-                ViewAction::make(),
-                EditAction::make(),
+                ViewAction::make()
+                    ->visible(fn(): bool => auth()->user()->can('view_user')),
+                EditAction::make()
+                    ->visible(fn(): bool => auth()->user()->can('update_user') || auth()->user()->can('edit_user')),
                 DeleteAction::make()
 
+                    ->visible(fn(Model $record): bool => auth()->user()->can('delete_user') && $record->companies->isEmpty()),
+                Tables\Actions\ForceDeleteAction::make()
+                    ->visible(fn(Model $record): bool => auth()->user()->can('force_delete_user') && $record->companies->isEmpty()),
+                Tables\Actions\RestoreAction::make()
+                    ->visible(fn(Model $record): bool => auth()->user()->can('restore_user')),
+
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
+                    // ...
+                ]),
             ]);
+
         return $table;
     }
     public static function getRelations(): array
@@ -437,15 +471,23 @@ class UserResource extends Resource
         return [
             UserResource\RelationManagers\CompaniesRelationManager::class,
             UserResource\RelationManagers\PanelsRelationManager::class,
+            // UserResource\RelationManagers\RolesRelationManager::class,
         ];
     }
     public static function getPages(): array
     {
         return [
             'index' => UserResource\Pages\ListUsers::route('/'),
-            // 'create' => CreateUser::route('/create'),
+            // 'create' => UserResource\Pages\CreateUser::route('/create'),
             'edit' => UserResource\Pages\EditUser::route('/{record}/edit'),
             'view' =>  UserResource\Pages\ViewUser::route('/{record}'),
         ];
+    }
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

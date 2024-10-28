@@ -27,7 +27,7 @@ class PanelResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-cube';
     public static function getGloballySearchableAttributes(): array
     {
-            return ['description', 'name', 'registered_panel_id'];
+        return ['description', 'name', 'registered_panel_id'];
     }
     public static function getGlobalSearchResultDetails(Model $record): array
     {
@@ -80,28 +80,40 @@ class PanelResource extends Resource
         return $form
             ->schema([
                 Forms\Components\FileUpload::make('logo')
-                        ->label('logo')
-                        ->directory('logos')
-                        ->columnSpanFull()
-                        ->getUploadedFileNameForStorageUsing(
-                            fn(TemporaryUploadedFile $file): string => (string) str($file->getClientOriginalName())
-                                ->prepend(Auth::user()->name . '-'),
-                        )
-                        ->downloadable()
-                        ->image()
-                        ->imageEditor()
-                        ->grow(false),
-                        Forms\Components\TextInput::make('name')
-                        ->required()
-                        ->maxLength(255),
+                    ->label('logo')
+                    ->directory('logos')
+                    ->columnSpanFull()
+                    ->getUploadedFileNameForStorageUsing(
+                        fn(TemporaryUploadedFile $file): string => (string) str($file->getClientOriginalName())
+                            ->prepend(Auth::user()->name . '-'),
+                    )
+                    ->downloadable()
+                    ->image()
+                    ->imageEditor()
+                    ->grow(false),
+                Forms\Components\TextInput::make('name')
+                    ->prefixIcon('tabler-file-text')
+                    ->prefixIconColor('primary')
+                    ->inlineLabel()
+                    ->label('Name')
+                    ->required()
+                    ->maxLength(255),
 
                 Forms\Components\TextInput::make('panel_path')
+                    ->prefixIcon('tabler-folder')
+                    ->prefixIconColor('primary')
+                    ->inlineLabel()
+                    ->label('Path')
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\TextInput::make('registered_panel_id')
+                Forms\Components\TextInput::make('registered_panel_id')
+                    ->prefixIcon('tabler-id')
+                    ->prefixIconColor('primary')
+                    ->inlineLabel()
+                    ->label('Registered ID')
                     ->required()
                     ->maxLength(255),
-                    Forms\Components\RichEditor::make('description')->columnSpanFull(),
+                Forms\Components\RichEditor::make('description')->columnSpanFull(),
             ]);
     }
 
@@ -111,15 +123,15 @@ class PanelResource extends Resource
             ->columns([
                 Tables\Columns\Layout\Split::make([
                     Tables\Columns\ImageColumn::make('logo')
-                    ->grow(false),
+                        ->grow(false),
                     Tables\Columns\Layout\Stack::make([
                         Tables\Columns\TextColumn::make('name')
-                    ->weight(FontWeight::Bold),
+                            ->weight(FontWeight::Bold),
 
                         Tables\Columns\TextColumn::make('description')
-                        ->iconColor('secondary')
-                        ->icon('heroicon-o-document-text')
-                        ->html()
+                            ->iconColor('secondary')
+                            ->icon('heroicon-o-document-text')
+                            ->html()
                     ]),
 
                 ]),
@@ -130,14 +142,17 @@ class PanelResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
-                ->visible(fn ():bool=>auth()->user()->can('viewAny_panel')),
+                    ->button()
+                    ->visible(fn(): bool => auth()->user()->can('viewAny_panel')),
                 Tables\Actions\EditAction::make()
-                ->visible(fn ():bool=>auth()->user()->can('update_panel')),
+                    ->color('warning')
+                    ->button()
+                    ->visible(fn(): bool => auth()->user()->can('update_panel')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                    ->visible(fn ():bool=>auth()->user()->can('delete_bulk_panel')),
+                        ->visible(fn(): bool => auth()->user()->can('delete_bulk_panel')),
                 ]),
             ]);
     }

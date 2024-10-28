@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Xbigdaddyx\Fuse\Domain\User\Filament\Resources;
 
@@ -15,6 +17,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Fields\PermissionGroup;
+
 class RoleResource extends Resource
 {
 
@@ -35,7 +38,12 @@ class RoleResource extends Resource
                     ->validationAttribute(__('fuse::fuse.resource.role.name'))
                     ->required()
                     ->maxLength(255)
-                    ->unique(config('permission.table_names.roles'), 'name', static fn ($record) => $record),
+                    ->unique(config('permission.table_names.roles'), 'name', static fn($record) => $record),
+                \Novadaemon\FilamentCombobox\Combobox::make('permissions')
+                    ->relationship('permissions', 'name')
+                    ->boxSearchs()
+                    ->optionsLabel('Available permissions')
+                    ->selectedLabel('Selected permissions'),
                 // PermissionGroup::make('permissions')
                 //     ->label(__('fuse::fuse.resource.role.permissions'))
                 //     ->validationAttribute(__('fuse::fuse.resource.role.permissions')),
@@ -47,20 +55,20 @@ class RoleResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('#')
-    ->rowIndex(),
+                    ->rowIndex(),
                 // TextColumn::make('id')
                 //     ->label(__('fuse::fuse.resource.role.id'))
                 //     ->sortable(),
                 TextColumn::make('description')
                     ->label(__('fuse::fuse.resource.role.description'))
-                    ->getStateUsing(static fn ($record) => __($record->name)),
+                    ->getStateUsing(static fn($record) => __($record->name)),
                 TextColumn::make('name')
 
-                ->summarize(Count::make()->label('Total')->prefix('Roles : '))
+                    ->summarize(Count::make()->label('Total')->prefix('Roles : '))
                     ->label(__('fuse::fuse.resource.role.name'))
                     ->searchable(),
-                    TextColumn::make('permissions')
-                    ->getStateUsing(static fn ($record) => (string)$record->permissions()->count())
+                TextColumn::make('permissions')
+                    ->getStateUsing(static fn($record) => (string)$record->permissions()->count())
                     ->label(__('fuse::fuse.resource.role.permissions'))
                     ->searchable(),
                 TextColumn::make('created_at')
@@ -105,7 +113,7 @@ class RoleResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RoleResource\RelationManagers\PermissionsRelationManager::class,
+            // RoleResource\RelationManagers\PermissionsRelationManager::class,
         ];
     }
 }

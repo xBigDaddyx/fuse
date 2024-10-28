@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Resources\UserResource;
 use Filament\Resources\Components\Tab;
 use Filament\Support\Enums\IconPosition;
+use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Builder;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\UserStats;
 use Xbigdaddyx\Fuse\Domain\User\Filament\Widgets\UserSummaryVerifiedChart;
@@ -31,13 +32,13 @@ class ListUsers extends ListRecords
             return [
                 'all' => Tab::make(),
                 'verified' => Tab::make()
-                    ->badge(User::query()->verified()->where('company_id', Filament::getTenant()->id)->count())
+                    ->badge(User::query()->verified()->where('company_id', Filament::getTenant()->id)->count() ?? '0')
                     ->badgeColor('success')
                     ->icon('heroicon-m-check-badge')
                     ->iconPosition(IconPosition::Before)
                     ->modifyQueryUsing(fn(Builder $query) => $query->verified()),
                 'unverified' => Tab::make()
-                    ->badge(User::query()->unverified()->where('company_id', Filament::getTenant()->id)->count())
+                    ->badge(User::query()->unverified()->where('company_id', Filament::getTenant()->id)->count() ?? '0')
                     ->badgeColor('danger')
                     ->icon('heroicon-m-x-circle')
                     ->iconPosition(IconPosition::Before)
@@ -68,7 +69,9 @@ class ListUsers extends ListRecords
     protected function getActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->modalWidth(MaxWidth::MaxContent)
+                ->icon('tabler-user-plus'),
         ];
     }
 }

@@ -25,11 +25,21 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Xbigdaddyx\Fuse\Domain\System\Models\Panel as ModelsPanel;
 use Devdojo\Auth\Models\User as AuthUser;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Xbigdaddyx\Falcon\Traits\HasAssets;
+use Xbigdaddyx\Fuse\Domain\User\Events\UserRegisteredEvent;
 
-class User extends AuthUser implements FilamentUser, HasTenants, HasAvatar, MustVerifyEmail
+class User extends AuthUser implements FilamentUser, HasTenants, HasAvatar, MustVerifyEmail, HasDefaultTenant
 {
-    use HasRoles, Notifiable, HasProfileAvatar, LogsActivity, HasAssets;
+    use HasRoles, Notifiable, HasProfileAvatar, LogsActivity, SoftDeletes;
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->company_id = Company::where('is_default', true)->first()->id;
+        });
+    }
     public function canAccessPanel(Panel $panel): bool
     {
         //return str_ends_with($this->email, '@yourdomain.com') && $this->hasVerifiedEmail();
@@ -48,6 +58,10 @@ class User extends AuthUser implements FilamentUser, HasTenants, HasAvatar, Must
         'email',
         'password',
         'avatar_url',
+        'phone',
+        'gender',
+        'roles',
+        'address'
     ];
     public function getActivitylogOptions(): LogOptions
     {
@@ -75,7 +89,7 @@ class User extends AuthUser implements FilamentUser, HasTenants, HasAvatar, Must
     }
     public function companies(): BelongsToMany
     {
-        return $this->belongsToMany(Company::class, 'user_company')->withPivot(['employee_id', 'department', 'job_title'])->withTimestamps();
+        return $this->belongsToMany(Company::class, 'user_company')->withPivot(['employee_id', 'department', 'job_title'])->withTimestamps()->using(UserCompany::class);
     }
     public function company(): BelongsTo
     {
@@ -104,5 +118,14 @@ class User extends AuthUser implements FilamentUser, HasTenants, HasAvatar, Must
     public function panels(): BelongsToMany
     {
         return $this->belongsToMany(ModelsPanel::class, 'user_panel');
+    }
+    public function getDefaultTenant(Panel $panel): ?Model
+    {
+        return $this->latestCompany;
+    }
+
+    public function latestCompany(): BelongsTo
+    {
+        return $this->belongsTo(Company::class, 'company_id');
     }
 }

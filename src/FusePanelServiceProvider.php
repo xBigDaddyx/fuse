@@ -2,6 +2,7 @@
 
 namespace Xbigdaddyx\Fuse;
 
+use CodeWithDennis\FilamentThemeInspector\FilamentThemeInspectorPlugin;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Http\Middleware\Authenticate;
@@ -82,8 +83,8 @@ class FusePanelServiceProvider extends PanelProvider
                 \Rmsramos\Activitylog\ActivitylogPlugin::make()
                     ->navigationGroup('Settings')
                     ->navigationSort(3),
-                \CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin::make()
-                    ->highlighter(false),
+                // \CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin::make()
+                //     ->highlighter(false),
                 \ChrisReedIO\Socialment\SocialmentPlugin::make()
                     ->registerProvider('azure', 'microsoft', 'Sign in with Microsoft'),
                 \Xbigdaddyx\Fuse\FusePlugin::make(),
