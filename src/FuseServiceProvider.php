@@ -97,7 +97,10 @@ class FuseServiceProvider extends PackageServiceProvider
             '2024_09_06_100208_add_event_column_to_activity_log_table',
             '2024_09_06_100209_add_batch_uuid_column_to_activity_log_table',
             '2024_09_09_085548_create_panel_table',
-            '2024_09_09_085549_create_user_panel_table'
+            '2024_09_09_085549_create_user_panel_table',
+            '2024_10_22_085158_add_is_default_column_to_companies_table',
+            '2024_10_22_110504_add_is_default_column_to_panels_table',
+            '2024_10_22_112614_add_softdelete_column_to_users_table'
         ];
     }
     public function packageRegistered(): void
